@@ -1,7 +1,7 @@
 
   <header>
     <h1>Shubham Aggarwal</h1>
-    <p>Email: aggarwalshubham026@gmail.com | Phone: +91 7678635459</p>
+    <p>Email: aggarwalshubham026@gmail.com</p>
     <p>Location: Delhi</p>
   </header>
 
