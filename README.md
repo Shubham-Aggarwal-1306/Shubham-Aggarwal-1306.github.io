@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shubham Aggarwal - Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
   <header>
     <h1>Shubham Aggarwal</h1>
     <p>Email: aggarwalshubham026@gmail.com | Phone: +91 7678635459</p>
@@ -141,6 +131,3 @@
       <a href="https://drive.google.com/file/1-AXMoE9JOB2bloJZWGavfsoXypRf8vPo/view?usp=drivesdk">View
         Certificate</a></p>
   </section>
-</body>
-
-</html>
