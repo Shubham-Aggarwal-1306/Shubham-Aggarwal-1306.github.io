@@ -67,7 +67,7 @@
       </li>
       <li>
         <h3>Vice President, NSS PIET</h3>
-        <p>Serving as NSS Vice President since May, 2022.</p>
+        <p>Served as NSS Vice President from May, 2022 to December, 2022</p>
       </li>
     </ul>
   </section>
