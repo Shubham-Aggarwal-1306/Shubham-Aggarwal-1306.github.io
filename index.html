@@ -4,144 +4,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shubham Aggarwal - Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="animations.js"></script>
+  <title>Shubham Aggarwal</title>
+  <meta name="description" content="Shubham Aggarwal — software engineer.">
+  <link rel="canonical" href="https://shubham-aggarwal.tech/">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --fg: #1a1a1a;
+      --muted: #5a5a5a;
+      --rule: #e2e2e2;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #131313;
+        --fg: #ececec;
+        --muted: #9a9a9a;
+        --rule: #2c2c2c;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 12vh 1.5rem 4rem;
+      background: var(--bg);
+      color: var(--fg);
+      font: 400 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      max-width: 34rem;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0 0 2rem;
+      color: var(--muted);
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    a {
+      color: var(--fg);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 2px;
+      transition: border-color 0.15s ease;
+    }
+
+    a:hover,
+    a:focus-visible {
+      border-bottom-color: var(--fg);
+    }
+  </style>
 </head>
 
 <body>
-  <header>
+  <main>
     <h1>Shubham Aggarwal</h1>
-    <p>Email: aggarwalshubham026@gmail.com</p>
-    <p>Location: Delhi</p>
-  </header>
 
-  <section id="education" class="section-animation">
-    <h2 class="section-title">Education</h2>
-    <ul>
-      <li>
-        <h3>B.Tech, Computer Science &amp; Technology</h3>
-        <p>PANIPAT INSTITUTE OF ENGINEERING AND TECHNOLOGY</p>
-        <p>2021 - 2025</p>
-      </li>
-      <li>
-        <h3>Senior Secondary (XII), Science</h3>
-        <p>Little Flowers Public Sr. Sec. School (CBSE board)</p>
-        <p>Year of completion: 2021</p>
-        <p>Percentage: 88.60%</p>
-      </li>
-      <li>
-        <h3>Secondary (X)</h3>
-        <p>Little Flowers Public Sr. Sec. School (CBSE board)</p>
-        <p>Year of completion: 2019</p>
-        <p>Percentage: 92.40%</p>
-      </li>
-    </ul>
-  </section>
+    <!-- TODO: replace with your actual one-line bio before publishing. -->
+    <p>Software engineer.</p>
 
-  <section id="internships" class="section-animation-alt">
-    <h2 class="section-title">Internships</h2>
-    <ul>
-      <li>
-        <h3>Web Development</h3>
-        <p>Acumensa Technologies Pvt. Ltd, Virtual</p>
-        <p>Dec 2022 - Present</p>
-        <p>Working on Full Stack Development using MERN Stack to solve a new problem, using new technologies like
-          blockchain. Created multiple REST APIs with popular packages for backend like sequelize to handle MySQL
-          Database and Different API integrations.</p>
-      </li>
-      <li>
-        <h3>Web Development</h3>
-        <p>Zaloom, Virtual</p>
-        <p>Aug 2022 - Oct 2022</p>
-        <p>Worked on creating backend of a product idea developed by zaloom to digitalize their work. Developed multiple
-          Rest APIs using Node.js and worked on popular cases like OAuth, etc. Developing a hybrid backend having both
-          Mysql and MongoDB.</p>
-      </li>
-      <li>
-        <h3>Python Development</h3>
-        <p>Ahluwalia Cooperation, Delhi</p>
-        <p>Aug 2022 - Aug 2022</p>
-        <p>Worked on two different aspects of a product development. Firstly got the glimpse of how a company decides on
-          the features and design of their product. Then worked on WebScraping in SITA (A service-based company) using
-          different new python modules.</p>
-      </li>
-    </ul>
-  </section>
-
-  <section id="responsibility" class="section-animation">
-    <h2 class="section-title">Positions of Responsibility</h2>
-    <ul>
-      <li>
-        <h3>Student Ambassador, AICTE IDEA LAB PIET</h3>
-        <p>Work with students on different Hardware Projects.</p>
-      </li>
-      <li>
-        <h3>Vice President, NSS PIET</h3>
-        <p>Served as NSS Vice President from May, 2022. to October, 2022</p>
-      </li>
-    </ul>
-  </section>
-
-  <section id="projects" class="section-animation-alt">
-    <h2 class="section-title">Projects</h2>
-    <ul>
-      <li>
-        <h3>4xbay</h3>
-        <p>Jan 2023 - Present</p>
-        <p><a href="https://4xbay.com">www.4xbay.com</a></p>
-        <p>Created a secure forex and crypto exchange platform using MERN stack and React Native. Leveraged Ethereum blockchain on Solana for scalability and transparency. Implemented real-time market data, trading charts, and portfolio management tools. Prioritized user security with multi-factor authentication and robust encryption. Delivered a reliable and user-friendly trading experience.</p>
-      </li>
-      <li>
-        <h3>E-Commerce Site</h3>
-        <p>May 2023 - Present</p>
-        <p><a href="https://github.com/Shubham-Aggarwal-1306/pph1-DW">Github</a></p>
-        <p>Developed a robust e-commerce website for dairy products using the MERN stack. Integrated advanced features like subscription and trial options to enhance user engagement. Leveraged MongoDB, Express.js, React.js, and Node.js for efficient data management, powerful back-end API development, dynamic user interfaces, and high-performance server-side operations. Prioritized security by implementing encryption and secure authentication practices to protect user data. Conducted rigorous testing and debugging to ensure platform stability. Delivered a high-quality, secure, and user-friendly e-commerce solution.</p>
-      </li>
-    </ul>
-  </section>
-
-  <section id="skills" class="section-animation">
-    <h2 class="section-title">Skills</h2>
-    <ul>
-      <li>Python (Advanced)</li>
-      <li>C++ Programming (Intermediate)</li>
-      <li>Flask (Advanced)</li>
-      <li>Algorithms (Intermediate)</li>
-      <li>GitHub (Intermediate)</li>
-      <li>jQuery (Intermediate)</li>
-      <li>CSS (Advanced)</li>
-      <li>MySQL (Intermediate)</li>
-      <li>HTML (Advanced)</li>
-      <li>JavaScript (Advanced)</li>
-      <li>Bootstrap (Advanced)</li>
-      <li>Git (Advanced)</li>
-      <li>Data Structures (Intermediate)</li>
-      <li>SQL (Advanced)</li>
-      <li>NoSQL (Advanced)</li>
-      <li>Node.js (Intermediate)</li>
-      <li>C Programming (Intermediate)</li>
-      <li>PHP (Intermediate)</li>
-      <li>MongoDB (Intermediate)</li>
-      <li>Arduino (Intermediate)</li>
-      <li>Raspberry Pi (Beginner)</li>
-      <li>ReactJS (Intermediate)</li>
-      <li>Express.js (Intermediate)</li>
-      <li>React Native (Beginner)</li>
-    </ul>
-  </section>
-
-  <section id="work-samples" class="section-animation-alt">
-    <h2 class="section-title">Work Samples</h2>
-    <p>GitHub profile: <a href="https://github.com/Shubham-Aggarwal-1306">github.com/Shubham-Aggarwal-1306</a></p>
-  </section>
-
-  <section id="additional-details" class="section-animation">
-    <h2 class="section-title">Additional Details</h2>
-    <p>Attended Idea lab skilling program of 40 hours spanning through 1 week learning numerous hardware technologies.
-      <a href="https://drive.google.com/file/1-AXMoE9JOB2bloJZWGavfsoXypRf8vPo/view?usp=drivesdk">View
-        Certificate</a></p>
-  </section>
+    <nav>
+      <a href="https://github.com/Shubham-Aggarwal-1306">GitHub</a>
+      <!-- TODO: add LinkedIn once the profile URL is confirmed. -->
+    </nav>
+  </main>
 </body>
 
 </html>
