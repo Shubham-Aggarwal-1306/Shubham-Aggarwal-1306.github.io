@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { SITE_URL, PERSON } from "@/lib/site";
 import { KNOWS_ABOUT } from "@/lib/content";
 import "./globals.css";
-
+import { Analytics } from "@vercel/analytics/next"
 const TITLE = `${PERSON.name} — ${PERSON.title}`;
 const DESCRIPTION =
   "Shubham Aggarwal is a backend-focused full-stack engineer in Delhi, India, building production platforms across iGaming, fintech, healthcare, EV infrastructure and e-commerce with Node.js, React and AWS.";
@@ -77,7 +77,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body>{children}
+      <Analytics/>
+      </body>
     </html>
   );
 }
