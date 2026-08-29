@@ -6,9 +6,13 @@ export type Point = { text: string; href?: string; linkText?: string; lead?: str
 export type Entry = {
   role: string;
   org: string;
+  /** Shorter label for the timeline chart, where the full legal name will not fit. */
+  shortOrg?: string;
   orgHref?: string;
   meta: string;
   version?: string;
+  /** Omit `to` only for a role that is genuinely ongoing — a missing `to`
+   *  renders as "– Present". */
   dates?: { from: string; to?: string };
   points?: Point[];
 };
@@ -25,19 +29,19 @@ export const STACK_LINES: { ok: string; text: string }[] = [
 
 // Hero lead — the first sentence of SUMMARY, unchanged.
 export const HERO_LEAD =
-  "Backend-focused full-stack engineer with 3+ years shipping production platforms across iGaming, fintech, healthcare, EV infrastructure, and e-commerce.";
+  "Backend-focused full-stack engineer with 2+ years shipping production platforms across iGaming, fintech, healthcare, EV infrastructure, and e-commerce.";
 
 export const STATUS = "Associate SWE at Daffodil Unthinkable";
 
 // Career-wide, deliberately not project-specific. Every figure traces back to a
 // line below — nothing is derived, rounded up, or invented.
-//   3+   — SUMMARY
+//   2+   — SUMMARY
 //   5    — the five domains named in SUMMARY: iGaming, fintech, healthcare,
 //          EV infrastructure, e-commerce
 //   20k+ — the live platform he is backend lead on
 //   40%  — Acumensa serverless migration
 export const STATS = [
-  { value: "3+", label: "Years shipping production" },
+  { value: "2+", label: "Years shipping production" },
   { value: "5", label: "Industries delivered in" },
   { value: "20,000+", label: "Users served in production" },
   { value: "40%", label: "Infrastructure cost reduction" },
@@ -58,13 +62,6 @@ export const RAMP = ["#86efac", "#4ade80", "#22c55e", "#15803d"];
 
 export const TIMELINE_START = "2022-08";
 
-export const TIMELINE = [
-  { org: "Daffodil Unthinkable", role: "Associate, Software Engineering", from: "2024-09", to: null },
-  { org: "Acumensa Technologies", role: "Full Stack Developer (Intern)", from: "2022-12", to: "2024-08" },
-  { org: "Zaloom", role: "Full Stack Development Intern", from: "2022-10", to: "2022-11" },
-  { org: "Ahluwalia Contracts", role: "Internship Trainee", from: "2022-08", to: "2022-08" },
-];
-
 // Three reductions, same unit and same job, so they share one scale. Each keeps
 // its context label — they come from different projects and must not read as
 // one comparable series.
@@ -84,13 +81,14 @@ export const INDUSTRIES = [
 ];
 
 export const SUMMARY =
-  "Backend-focused full-stack engineer with 3+ years shipping production platforms across iGaming, fintech, healthcare, EV infrastructure, and e-commerce. Backend lead on a live platform serving 20,000+ users, with working ownership of React front ends and React Native mobile alongside Node.js services, SQL and NoSQL data layers, and serverless deployment on AWS and GCP.";
+  "Backend-focused full-stack engineer with 2+ years shipping production platforms across iGaming, fintech, healthcare, EV infrastructure, and e-commerce. Backend lead on a live platform serving 20,000+ users, with working ownership of React front ends and React Native mobile alongside Node.js services, SQL and NoSQL data layers, and serverless deployment on AWS and GCP.";
 
 export const EXPERIENCE: Entry[] = [
   {
     role: "Associate, Software Engineering",
     version: "1.3.0",
     org: "Daffodil Unthinkable Software Corporation",
+    shortOrg: "Daffodil Unthinkable",
     meta: "Hisar, India (Hybrid)",
     dates: { from: "2024-09" },
     points: [
@@ -114,6 +112,7 @@ export const EXPERIENCE: Entry[] = [
     role: "Full Stack Developer (Intern)",
     version: "1.2.0",
     org: "Acumensa Technologies Pvt. Ltd.",
+    shortOrg: "Acumensa Technologies",
     meta: "Remote",
     dates: { from: "2022-12", to: "2024-08" },
     points: [
@@ -157,7 +156,9 @@ export const EXPERIENCE: Entry[] = [
     version: "1.0.0",
     org: "Ahluwalia Contracts",
     meta: "Okhla, Delhi",
-    dates: { from: "2022-08" },
+    // A one-month internship that ended in Aug 2022. Without `to` this rendered
+    // as "Aug 2022 – Present", claiming he still works there.
+    dates: { from: "2022-08", to: "2022-08" },
     points: [
       {
         text: "Built Python tooling to extract and analyse procurement data, producing reporting outputs for the procurement team.",
@@ -166,11 +167,24 @@ export const EXPERIENCE: Entry[] = [
   },
 ];
 
+// Derived from EXPERIENCE so the chart and the detail cards can never disagree
+// about a date. They used to be two hand-maintained arrays, which is exactly how
+// Ahluwalia ended up reading "Aug 2022 – Present" in one place and
+// "Aug 2022 – Aug 2022 · 1 month" in the other.
+export const TIMELINE = EXPERIENCE.map((e) => ({
+  org: e.shortOrg ?? e.org,
+  role: e.role,
+  from: e.dates!.from,
+  to: e.dates!.to ?? null,
+}));
+
 export const PROJECTS: Entry[] = [
   {
     role: "Finvault",
-    org: "Finaccru",
-    orgHref: "https://finaccru.com",
+    // The product, not finaccru.com — that is the accounting firm's marketing
+    // site, which is not what was built here.
+    org: "finvault.finaccru.com",
+    orgHref: "https://finvault.finaccru.com",
     meta: "Node.js · React.js · Firebase · Python · AWS S3",
     points: [
       {

@@ -15,5 +15,5 @@ export const PERSON = {
   location: "Delhi, India",
   email: "aggarwalshubham026@gmail.com",
   github: "https://github.com/Shubham-Aggarwal-1306",
-  linkedin: "https://www.linkedin.com/in/shubham-aggarwal-654ab521a",
+  linkedin: "https://www.linkedin.com/in/shubhamaggarwaltech",
 } as const;

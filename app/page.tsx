@@ -33,6 +33,10 @@ function Dates({ from, to }: { from: string; to?: string }) {
     const [y, m] = iso.split("-");
     return `${MONTHS[Number(m) - 1]} ${y}`;
   };
+
+  // A single-month engagement is one date, not "Aug 2022 – Aug 2022".
+  if (to === from) return <time dateTime={from}>{label(from)}</time>;
+
   return (
     <>
       <time dateTime={from}>{label(from)}</time>
@@ -41,9 +45,9 @@ function Dates({ from, to }: { from: string; to?: string }) {
           {" – "}
           <time dateTime={to}>{label(to)}</time>
         </>
-      ) : from ? (
+      ) : (
         " – Present"
-      ) : null}
+      )}
     </>
   );
 }
