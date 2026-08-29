@@ -181,10 +181,12 @@ export const TIMELINE = EXPERIENCE.map((e) => ({
 export const PROJECTS: Entry[] = [
   {
     role: "Finvault",
-    // The product, not finaccru.com — that is the accounting firm's marketing
-    // site, which is not what was built here.
-    org: "finvault.finaccru.com",
-    orgHref: "https://finvault.finaccru.com",
+    // Points at the apex rather than finvault.finaccru.com: that subdomain has
+    // a Vercel DNS record but serves nothing, so it would be a dead link. The
+    // apex is the firm's marketing site, not the product itself — swap back if
+    // the product host comes up.
+    org: "finaccru.com",
+    orgHref: "https://finaccru.com",
     meta: "Node.js · React.js · Firebase · Python · AWS S3",
     points: [
       {
