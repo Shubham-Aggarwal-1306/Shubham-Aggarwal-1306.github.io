@@ -170,6 +170,14 @@ export default function Page() {
               <li><a href="#contact">Contact</a></li>
             </ul>
           </nav>
+          <a className="nav__resume glass" href={PERSON.resume} download>
+            <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8 2v8" />
+              <path d="M4.5 7 8 10.5 11.5 7" />
+              <path d="M2.5 12.5v1h11v-1" />
+            </svg>
+            <span>Résumé</span>
+          </a>
         </div>
         <div className="nav__progress" aria-hidden="true">
           <i />
@@ -203,6 +211,7 @@ export default function Page() {
                 <li><a className="link" href={`mailto:${PERSON.email}`}>Email</a></li>
                 <li><a className="link" href={PERSON.github}>GitHub</a></li>
                 <li><a className="link" href={PERSON.linkedin}>LinkedIn</a></li>
+                <li><a className="link" href={PERSON.resume} download>Résumé</a></li>
               </ul>
             </div>
 
@@ -310,6 +319,7 @@ export default function Page() {
           <ul className="inline-links" data-reveal>
             <li><a className="link" href={PERSON.github}>GitHub</a></li>
             <li><a className="link" href={PERSON.linkedin}>LinkedIn</a></li>
+            <li><a className="link" href={PERSON.resume} download>Résumé</a></li>
           </ul>
         </Band>
       </main>

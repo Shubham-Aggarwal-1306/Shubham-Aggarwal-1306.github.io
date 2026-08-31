@@ -16,4 +16,6 @@ export const PERSON = {
   email: "aggarwalshubham026@gmail.com",
   github: "https://github.com/Shubham-Aggarwal-1306",
   linkedin: "https://www.linkedin.com/in/shubhamaggarwaltech",
+  /** Served from public/. Update BOTH this path and the file if it is renamed. */
+  resume: "/Shubham_Aggarwal_Resume.pdf",
 } as const;

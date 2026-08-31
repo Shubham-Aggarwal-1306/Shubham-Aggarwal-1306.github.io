@@ -248,7 +248,9 @@ export const RECOGNITION = [
 ];
 
 export const SKILLS = [
-  { label: "Languages", value: "JavaScript, TypeScript, Python, Java, C++, C, SQL" },
+  // Matches the résumé exactly. It drops C++ and C, which the site used to
+  // list — keep the two in step.
+  { label: "Languages", value: "JavaScript, TypeScript, Python, Java, SQL" },
   { label: "Frameworks", value: "React.js, Next.js, React Native, Node.js, Express.js, Django" },
   {
     label: "Data & Cloud",
