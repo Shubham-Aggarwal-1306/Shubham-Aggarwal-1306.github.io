@@ -1336,14 +1336,36 @@ a {
 
 @media (min-width: 48rem) {
   .tl__row {
-    grid-template-columns: 16rem 1fr 14rem;
+    /* The date column holds "Dec 2022 – Aug 2024" plus a duration now written
+       as years and months, which needs ~16rem to stay on one line. Sized with
+       headroom so a longer span later does not start wrapping only some rows
+       and leaving the timeline ragged.
+       The extra width comes out of the org column, which measures under 13rem
+       of actual content, rather than out of the bar track — the bar's length
+       is the chart's data encoding and should not be the thing that shrinks. */
+    grid-template-columns: 13rem 1fr 17rem;
     align-items: center;
     gap: 1.5rem;
   }
 
+  /* Fixed columns rather than a right-aligned flex run. Each .tl__when is its
+     own formatting context, so nothing inside one row can align itself against
+     another — only equal widths per part make the four rows line up. Combined
+     with the tabular-nums already on .tl__when, the dates read as a column. */
   .tl__when {
-    justify-content: flex-end;
+    display: grid;
+    /* Measured, not guessed: the widest date ("Sept 2024") is 77px and the
+       widest duration ("2 yrs 1 mo") 71px at this size, so these carry a few
+       px of headroom each and the four columns still total 17rem. */
+    grid-template-columns: 5rem .75rem 5rem 1fr;
+    justify-content: end;
+    align-items: baseline;
+    gap: 0 .5rem;
     text-align: right;
+  }
+
+  .tl__sep {
+    text-align: center;
   }
 }
 

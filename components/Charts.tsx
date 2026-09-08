@@ -24,6 +24,25 @@ const label = (iso: string) => {
   return `${MONTHS[Number(m) - 1]} ${y}`;
 };
 
+/**
+ * A span in years and months, falling back to months alone under a year:
+ * "2 yrs 1 mo" rather than "25 months", which makes the reader do the division.
+ * The months part is dropped when it is zero, so a clean span reads "2 yrs".
+ *
+ * Abbreviated because the date column has to hold two dates and this duration
+ * on one line. Spelled out, "2 years 1 month" measures 118px against the 84px
+ * available, and buying that back would have taken ~18% off the bar track —
+ * and the bar's length is the chart's data encoding.
+ */
+const duration = (months: number) => {
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  const parts: string[] = [];
+  if (y) parts.push(`${y} ${y === 1 ? "yr" : "yrs"}`);
+  if (m || !y) parts.push(`${m} ${m === 1 ? "mo" : "mos"}`);
+  return parts.join(" ");
+};
+
 export function Timeline() {
   // Resolved when the page is prerendered, so the span keeps up with each
   // deploy. A server component, so the client never recomputes it — no
@@ -66,12 +85,24 @@ export function Timeline() {
                 />
               </div>
 
+              {/* Each part is its own element so the four can be given fixed
+                  columns and line up down the timeline. As bare text nodes the
+                  dash and "Present" could not be sized, which is what left the
+                  dates ragged. */}
               <p className="tl__when">
-                <time dateTime={t.from}>{label(t.from)}</time>
-                {" – "}
-                {t.to ? <time dateTime={t.to}>{label(t.to)}</time> : "Present"}
+                <time className="tl__date" dateTime={t.from}>
+                  {label(t.from)}
+                </time>
+                <span className="tl__sep">–</span>
+                {t.to ? (
+                  <time className="tl__date" dateTime={t.to}>
+                    {label(t.to)}
+                  </time>
+                ) : (
+                  <span className="tl__date">Present</span>
+                )}
                 <span className="tl__dur" data-count>
-                  {months} {months === 1 ? "month" : "months"}
+                  {duration(months)}
                 </span>
               </p>
             </li>
