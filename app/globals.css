@@ -495,6 +495,226 @@ a {
 .term__ok { color: #4ade80; }
 .term__dim { color: var(--faint); }
 
+/* ---- skill sphere ---- */
+
+/* Sits under the section heading in the sticky label column, so it stays in
+   view beside the terminal for the length of the section. Sized to the column
+   rather than a fixed width — that column is 14rem, widening to 18rem. */
+.orb {
+  position: relative;
+  width: 100%;
+  max-width: 15rem;
+  aspect-ratio: 1;
+  margin: 1.75rem 0 0;
+  /* Items are placed from the centre, so this is the origin the transforms in
+     SkillSphere.tsx measure from. */
+  display: grid;
+  place-items: center;
+  /* Muted rather than --fg: several of these marks (JavaScript, TypeScript)
+     are solid filled squares, and at full white they read as glaring blocks
+     beside the outline marks. Depth opacity still separates front from back. */
+  color: var(--muted);
+}
+
+.orb__i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  /* Set per frame by SkillSphere.tsx; these are the resting values used before
+     the first paint and under reduced motion. */
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.orb__i svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: block;
+}
+
+/* Capped and wrapping: a single long label ("React Native" at 84px) is what
+   decides how far the sphere throws its widest item, and unwrapped it came
+   within 2px of the terminal beside it. Two short lines keep every item well
+   inside the gutter. */
+.orb__t {
+  display: block;
+  max-width: 4.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .7rem;
+  letter-spacing: .02em;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---- interactive console ---- */
+
+.term-wrap {
+  position: relative;
+}
+
+/* Added by Console.tsx only after mount, so a scripting-off page never shows a
+   control that cannot do anything. */
+.term__expand {
+  position: absolute;
+  top: .55rem;
+  right: .7rem;
+  padding: .3rem .6rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--muted);
+  font: inherit;
+  font-size: .7rem;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.term__expand:hover,
+.term__expand:focus-visible {
+  color: var(--fg);
+  border-color: var(--fg);
+}
+
+.cons {
+  width: min(64rem, 92vw);
+  height: min(38rem, 82vh);
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: .9rem;
+  background: var(--paper);
+  color: var(--fg);
+  overflow: hidden;
+}
+
+.cons::backdrop {
+  background: rgb(0 0 0 / .72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Background scroll lock, keyed off the dialog's own [open] attribute so it
+   unwinds itself however the console is dismissed — button, Esc, or backdrop.
+   Doing this from JS leaks the lock on Esc, which never runs our handler. */
+body:has(dialog.cons[open]) {
+  overflow: hidden;
+}
+
+.cons[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.cons__bar {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  flex: none;
+  padding: .6rem .85rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.cons__bar i {
+  width: .55rem;
+  height: .55rem;
+  border-radius: 50%;
+  background: var(--rule);
+  flex: none;
+}
+
+.cons__bar span {
+  margin-left: .6rem;
+  font-size: .75rem;
+  color: var(--faint);
+}
+
+.cons__x {
+  margin-left: auto;
+  padding: .15rem .45rem;
+  border: 0;
+  border-radius: .3rem;
+  background: transparent;
+  color: var(--faint);
+  font: inherit;
+  font-size: .85rem;
+  cursor: pointer;
+}
+
+.cons__x:hover,
+.cons__x:focus-visible {
+  color: var(--fg);
+}
+
+.cons__feed {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem .95rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .8125rem;
+  line-height: 1.7;
+}
+
+/* Output is pre-formatted text: padded columns in the command tables only line
+   up if the whitespace survives, and long lines must still wrap. */
+.cons__l {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.cons__l--head { color: var(--fg); font-weight: 600; }
+.cons__l--ok   { color: var(--accent); }
+.cons__l--dim  { color: var(--muted); }
+.cons__l--cmd  { color: var(--fg); }
+.cons__l--err  { color: var(--accent-2); }
+
+.cons__in {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex: none;
+  padding: .7rem .95rem;
+  border-top: 1px solid var(--rule);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .8125rem;
+}
+
+.cons__prompt {
+  color: var(--accent);
+  flex: none;
+}
+
+.cons__in input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  outline: none;
+}
+
+.cons__in input::placeholder {
+  color: var(--faint);
+}
+
+@media (max-width: 47.99rem) {
+  .cons {
+    width: 94vw;
+    height: 80vh;
+  }
+
+  .term__expand {
+    position: static;
+    display: block;
+    margin: .6rem 0 0 auto;
+  }
+}
+
 /* ---- changelog ---- */
 
 .entry__version {

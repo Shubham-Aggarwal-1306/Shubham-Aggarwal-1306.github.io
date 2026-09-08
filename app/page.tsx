@@ -10,6 +10,8 @@ import Rain from "@/components/Rain";
 import Dust from "@/components/Dust";
 import Counters from "@/components/Counters";
 import Deck from "@/components/Deck";
+import Console from "@/components/Console";
+import SkillSphere from "@/components/SkillSphere";
 import { PERSON } from "@/lib/site";
 import {
   HERO_LEAD,
@@ -152,11 +154,14 @@ function Band({
   label,
   children,
   className = "",
+  aside,
 }: {
   id: string;
   label: string;
   children: React.ReactNode;
   className?: string;
+  /** Optional decoration under the section heading, in the sticky label column. */
+  aside?: React.ReactNode;
 }) {
   return (
     <section className={`band ${className}`} id={id} aria-labelledby={`${id}-h`}>
@@ -165,6 +170,7 @@ function Band({
           <h2 id={`${id}-h`} className="eyebrow">
             {label}
           </h2>
+          {aside}
         </div>
         <div className="band__body">{children}</div>
       </div>
@@ -318,7 +324,8 @@ export default function Page() {
           </ul>
         </Band>
 
-        <Band id="skills" label="Skills">
+        <Band id="skills" label="Skills" aside={<SkillSphere />}>
+          <Console>
           <div className="term glass" data-reveal>
             <p className="term__bar" aria-hidden="true">
               <i /><i /><i />
@@ -340,6 +347,7 @@ export default function Page() {
               </code>
             </pre>
           </div>
+          </Console>
 
           <dl className="skills">
             {SKILLS.map((s) => (
