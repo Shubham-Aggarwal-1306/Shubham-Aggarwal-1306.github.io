@@ -70,7 +70,7 @@ export function Timeline() {
                 <time dateTime={t.from}>{label(t.from)}</time>
                 {" – "}
                 {t.to ? <time dateTime={t.to}>{label(t.to)}</time> : "Present"}
-                <span className="tl__dur">
+                <span className="tl__dur" data-count>
                   {months} {months === 1 ? "month" : "months"}
                 </span>
               </p>
@@ -94,7 +94,7 @@ export function Impact() {
         {IMPACT.map((d, i) => (
           <li className="bars__row" key={d.metric}>
             <p className="bars__head">
-              <span className="bars__value">{d.value}%</span>
+              <span className="bars__value" data-count>{d.value}%</span>
               <span className="bars__metric">{d.metric}</span>
             </p>
             <div className="bars__track" aria-hidden="true">

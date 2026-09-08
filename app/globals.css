@@ -80,11 +80,29 @@ img {
   transition: opacity 1.2s ease;
 }
 
-/* Held well below 1: the field is a backdrop, and text legibility over it is
-   the constraint that matters. --field-opacity is driven by scroll in
-   Motion.tsx so the field recedes once body copy is on screen. */
+/* Currently unused: Field is not mounted (see the note in app/page.tsx), so
+   nothing matches #gl and nothing sets --field-opacity any more. Kept, with
+   the fallback in the var(), so remounting the component is a one-line change.
+   Held well below 1 because the field is a backdrop, and legibility of the
+   text over it is the constraint that matters. */
 #gl.is-ready {
   opacity: var(--field-opacity, .55);
+}
+
+/* Pointer-reactive dust for the sections below the hero. Sits under .grain and
+   under main (z-index 2), and the bands carry no background of their own, so it
+   shows through the whole page. Builds as the rain thins — Motion.tsx drives
+   --dust-o from scroll, and Dust.tsx reads the same value to decide whether the
+   frame loop is worth running at all. */
+#dust {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+  opacity: var(--dust-o, 0);
 }
 
 .grain {
@@ -561,6 +579,68 @@ a {
   letter-spacing: -.045em;
 }
 
+/* ---------- pixel name ----------
+   The name as a checkerboard inside a rectangle. Cells are square and sized by
+   the container, so the whole sign scales with the column rather than needing
+   breakpoints. Every cell carries its true state in data-on from the server;
+   data-lit is the animation's temporary override and always wins because it
+   comes later at equal specificity. */
+
+.px-name {
+  display: grid;
+  grid-template-columns: repeat(var(--px-cols, 37), 1fr);
+  gap: 2px;
+  width: 100%;
+  max-width: 40rem;
+  padding: .55rem;
+  border: 1px solid var(--rule);
+  border-radius: .5rem;
+  /* The grid is the whole content of an h1 that still carries display type
+     metrics; reset them so the box hugs the cells. */
+  font-size: 0;
+  line-height: 0;
+  letter-spacing: 0;
+}
+
+.px {
+  aspect-ratio: 1;
+  border-radius: 1px;
+  /* Checker: the two phases differ just enough to read as a board without
+     competing with the lit cells that spell the name. */
+  background: rgb(255 255 255 / .035);
+  transition: background .16s linear;
+}
+
+.px[data-alt="1"] {
+  background: rgb(255 255 255 / .07);
+}
+
+.px[data-on="1"] {
+  background: var(--fg);
+}
+
+/* Animation overrides — declared last so they win over data-on. */
+.px[data-lit="1"] {
+  background: var(--fg);
+}
+
+.px[data-lit="0"] {
+  background: rgb(255 255 255 / .05);
+}
+
+@media (max-width: 47.99rem) {
+  .px-name {
+    gap: 1px;
+    padding: .35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .px {
+    transition: none;
+  }
+}
+
 .hero__name .line {
   display: block;
   overflow: hidden;
@@ -625,6 +705,153 @@ a {
 
 .entry--card:first-child {
   padding-top: 1.5rem;
+}
+
+/* ---------- project preview ---------- */
+
+/* Screenshots of the live products. Held inset rather than bled to the card
+   edge: .glass-flat draws its rim in a ::before at inset 0, and a full-bleed
+   image would sit on top of that 1px and break the card outline. */
+.entry__preview {
+  position: relative;
+  margin: 0 0 1.35rem;
+  border-radius: .8rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .04);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .12),
+    0 18px 34px -24px rgba(0, 0, 0, 1);
+}
+
+.entry__preview a {
+  display: block;
+  border-radius: inherit;
+}
+
+.entry__preview a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Held back at rest so four different client brand palettes do not fight the
+   page, then released to full colour on hover — the site's own accents stay
+   the loudest thing on screen until you actually reach for a project. */
+.entry__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  filter: saturate(.7) brightness(.82);
+  transition: filter .5s ease, transform .5s ease;
+}
+
+.entry__preview:hover .entry__shot,
+.entry__preview:focus-within .entry__shot {
+  filter: none;
+  transform: scale(1.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry__shot {
+    transition: filter .5s ease;
+  }
+
+  .entry__preview:hover .entry__shot,
+  .entry__preview:focus-within .entry__shot {
+    transform: none;
+  }
+}
+
+/* ---------- project deck ----------
+   Base layout is the plain vertical list this section has always been. The
+   stacking is layered on only where scripting is available, so no-JS and
+   reduced-motion readers get an ordinary, complete list of projects. */
+
+.deck__title {
+  text-align: center;
+  margin: 0 0 2.5rem;
+}
+
+.deck__cards {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (scripting: enabled) {
+  .deck {
+    position: relative;
+    /* One stage plus a screenful of scroll per extra card — this is what sets
+       how long the section stays pinned while the deck is swiped through. */
+    height: calc(100vh + (var(--deck-n, 3) - 1) * 72vh);
+  }
+
+  .deck__stage {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Top padding clears the sticky nav — without it the centred heading sits
+       underneath the header bar. */
+    padding-block: 5.5rem 2.5rem;
+    /* Cards rotate and slide out to the left; without this they would widen
+       the page and trip the horizontal scrollbar. */
+    overflow: hidden;
+  }
+
+  /* All cards share one grid cell, so they overlay without absolute
+     positioning — the container still takes the height of the tallest card
+     rather than needing a hard-coded one. */
+  .deck__cards > * {
+    grid-area: 1 / 1;
+    margin-bottom: 0;
+    will-change: transform, opacity;
+  }
+
+  /* Stacked cards have to be opaque. .glass-flat is deliberately translucent,
+     which is right when cards sit apart in a list but not when three are
+     overlaid — every card's text reads through every other one at once. Filling
+     the card's own surface lets it occlude the deck behind it; the gradient
+     sheen and rim still sit on top, so it reads as the same material. */
+  .deck__cards > .entry--card {
+    background-color: var(--paper);
+  }
+
+  .deck__cards {
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  /* A whole card has to fit one screen alongside the heading, and the preview
+     is the tallest thing in it. Cropping it shorter here (object-fit already
+     covers) buys the room without truncating any of the text. */
+  .deck__cards .entry__shot {
+    aspect-ratio: 5 / 2;
+  }
+
+  .deck__title {
+    margin-bottom: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck {
+    height: auto !important;
+  }
+
+  .deck__stage {
+    position: static !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .deck__cards > * {
+    grid-area: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
 .awards li {
@@ -801,6 +1028,30 @@ a {
     transition: opacity .85s var(--ease), transform .85s var(--ease);
   }
 
+  /* Bars grow out of their left edge on first reveal. Driven off the existing
+     [data-reveal].is-in the charts already sit inside, so this needs no
+     observer of its own. scaleX rather than width: the true width stays in the
+     inline style, so with scripting off every bar renders full-length and
+     correct — this only ever animates from 0 to that value, never past it. */
+  .bars__fill,
+  .tl__bar {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 1.05s var(--ease);
+  }
+
+  [data-reveal].is-in .bars__fill,
+  [data-reveal].is-in .tl__bar {
+    transform: scaleX(1);
+  }
+
+  /* Cascade down the rows so they read as a sequence, not a single flash. */
+  .bars__row:nth-child(2) .bars__fill,
+  .tl__row:nth-child(2) .tl__bar { transition-delay: .1s; }
+  .bars__row:nth-child(3) .bars__fill,
+  .tl__row:nth-child(3) .tl__bar { transition-delay: .2s; }
+  .tl__row:nth-child(4) .tl__bar { transition-delay: .3s; }
+
   [data-reveal].is-in {
     opacity: 1;
     transform: none;
@@ -925,6 +1176,13 @@ a {
   [data-rise],
   [data-reveal] {
     opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Bars sit at their true inline width with no scale applied, so they can
+     never be stranded collapsed if .is-in were ever late or absent. */
+  .bars__fill,
+  .tl__bar {
     transform: none !important;
   }
 
@@ -1496,18 +1754,93 @@ a {
   margin-bottom: 1.25rem;
 }
 
+/* ---------- ascii rain ----------
+   Falls behind the hero, clipped to it. Deliberately restrained: the glyphs
+   are mostly blank, the columns sit between .10 and .23 alpha, and the layer
+   is masked top and bottom so it never reaches the headline or the stats.
+
+   Legibility is safe by construction — the rain is behind the text, and the
+   densest possible blend (accent at .23 over the page black) still leaves
+   white type above 15:1. */
+
+.rain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  /* Thins out as the dust builds, so the two overlap through About instead of
+     one replacing the other. Defaults to 1 so the rain still renders with
+     scripting off — Motion.tsx only ever reduces it. */
+  opacity: var(--rain-o, 1);
+  /* Softened at the viewport edges so the layer never terminates on a hard
+     line at the top or bottom of the screen. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+.rain__c {
+  position: absolute;
+  top: 0;
+  white-space: pre;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Loose enough that adjacent glyphs stay separate characters instead of
+     fusing into a continuous line. */
+  line-height: 1.25;
+  color: var(--accent);
+  animation-name: rain-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+/* The column's text is duplicated, so half its height is exactly one loop. */
+@keyframes rain-fall {
+  from { transform: translate3d(0, -50%, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+@media (max-width: 47.99rem) {
+  /* Narrower viewport, same column count would read as a curtain. */
+  .rain {
+    opacity: .6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rain__c {
+    animation: none;
+  }
+}
+
 /* ---------- ascii clouds ----------
    Sit behind the hero and extend above it, so they pass under the sticky
    header's blur and bleed into it. Not clipped by the hero for that reason —
    body already carries overflow-x: hidden, which stops any sideways spill. */
 
+/* Hero layering, stated explicitly rather than left to DOM order:
+   rain 0  <  clouds 1  <  content 2. Clouds sit above the rain because rain
+   falls out of them, not across them. */
 .clouds {
   position: absolute;
   top: 0;
   right: 0;
-  width: min(38rem, 72vw);
-  height: 24rem;
-  z-index: 0;
+  width: min(54rem, 88vw);
+  height: 30rem;
+  z-index: 1;
   pointer-events: none;
   user-select: none;
 }
@@ -1517,7 +1850,7 @@ a {
    .shell `position: absolute` and collapsed the whole hero on top of itself. */
 .hero > .shell {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .clouds__c {
@@ -1526,7 +1859,15 @@ a {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: clamp(9px, 1.2vw, 15px);
   line-height: 1.1;
-  color: var(--fg);
+  /* Dimming lives on the text colour, not on the element, so the backing below
+     stays fully opaque. See the note in Clouds.tsx. */
+  color: rgb(255 255 255 / var(--dim, .3));
+  /* An opaque plate the colour of the page, feathered outward, so the rain
+     passes behind the cloud instead of through it. Invisible against the page
+     itself — all it does is punch the rain out around the sprite. */
+  background: var(--bg);
+  box-shadow: 0 0 1.1rem .7rem var(--bg);
+  border-radius: .4rem;
   animation-name: cloud-drift;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;

@@ -1,11 +1,15 @@
-import Field from "@/components/Field";
+import Image from "next/image";
 import Motion from "@/components/Motion";
 import Clock from "@/components/Clock";
 import { Timeline, Impact, Industries } from "@/components/Charts";
 import Intro from "@/components/Intro";
 import Ocean from "@/components/Ocean";
-import AsciiName from "@/components/AsciiName";
+import PixelName from "@/components/PixelName";
 import Clouds from "@/components/Clouds";
+import Rain from "@/components/Rain";
+import Dust from "@/components/Dust";
+import Counters from "@/components/Counters";
+import Deck from "@/components/Deck";
 import { PERSON } from "@/lib/site";
 import {
   HERO_LEAD,
@@ -76,9 +80,33 @@ function Bullet({ point }: { point: Point }) {
   );
 }
 
+/** A screenshot of the live product. Wrapped in a link where the site is
+ *  public, so the preview is a way in rather than only decoration. */
+function Preview({ preview, href }: { preview: NonNullable<Entry["preview"]>; href?: string }) {
+  const figure = (
+    <Image
+      src={preview.src}
+      alt={preview.alt}
+      width={1200}
+      height={600}
+      // The card is the full band body, capped near 720px, and never spans the
+      // viewport — so asking for 100vw would ship a needlessly large file.
+      sizes="(min-width: 900px) 720px, 100vw"
+      className="entry__shot"
+    />
+  );
+
+  return (
+    <div className="entry__preview">
+      {href ? <a href={href}>{figure}</a> : figure}
+    </div>
+  );
+}
+
 function EntryBlock({ entry, href, card }: { entry: Entry; href?: string; card?: boolean }) {
   return (
     <article className={card ? "entry entry--card glass-flat" : "entry"} data-reveal>
+      {entry.preview ? <Preview preview={entry.preview} href={href} /> : null}
       {entry.version ? (
         <p className="entry__version">
           <span>{entry.version}</span>
@@ -152,9 +180,20 @@ export default function Page() {
       </a>
 
       <Intro />
-      <Field />
+      {/* The WebGL field (components/Field.tsx) used to mount here. Pulled in
+          favour of the hero's ASCII rain — two moving backdrops competed. The
+          component and its #gl styles are kept intact to make restoring it a
+          one-line change. */}
+      {/* Both backdrops are page-level fixed layers rather than section
+          children, so they can cross-fade into each other across the hero →
+          About boundary instead of swapping at it. Motion.tsx drives
+          --rain-o and --dust-o from scroll; they overlap for roughly a full
+          viewport, which is the stretch where About sits. */}
+      <Rain />
+      <Dust />
       <div className="grain" aria-hidden="true" />
       <Motion />
+      <Counters />
 
       <header className="nav" id="top">
         <div className="shell nav__inner">
@@ -201,7 +240,7 @@ export default function Page() {
                 {/* Real text kept for crawlers and screen readers — the art is
                     decoration and must not replace the name itself. */}
                 <span className="sr-only">Shubham Aggarwal</span>
-                <AsciiName lines={["SHUBHAM"]} />
+                <PixelName text="SHUBHAM" />
               </h1>
               <p className="hero__role" data-rise>
                 Backend-focused <em>Full-Stack</em> Engineer
@@ -226,7 +265,7 @@ export default function Page() {
             <ul className="stats glass-flat" data-rise>
               {STATS.map((s) => (
                 <li key={s.label}>
-                  <span className="stats__value">{s.value}</span>
+                  <span className="stats__value" data-count>{s.value}</span>
                   <span className="stats__label">{s.label}</span>
                 </li>
               ))}
@@ -257,11 +296,16 @@ export default function Page() {
           ))}
         </Band>
 
-        <Band id="projects" label="Projects">
-          {PROJECTS.map((p) => (
-            <EntryBlock key={p.role} entry={p} href={PROJECT_LINKS[p.role]} card />
-          ))}
-        </Band>
+        {/* Not a <Band>: the deck needs its heading centred inside the pinned
+            stage rather than in Band's sticky left column. Keeps the id and
+            aria-labelledby the nav's section spy relies on. */}
+        <section className="band band--deck" id="projects" aria-labelledby="projects-h">
+          <Deck count={PROJECTS.length} title="Projects" headingId="projects-h">
+            {PROJECTS.map((p) => (
+              <EntryBlock key={p.role} entry={p} href={PROJECT_LINKS[p.role]} card />
+            ))}
+          </Deck>
+        </section>
 
         <Band id="recognition" label="Recognition">
           <ul className="awards">

@@ -15,6 +15,12 @@ export type Entry = {
    *  renders as "– Present". */
   dates?: { from: string; to?: string };
   points?: Point[];
+  /** A real screenshot, captured from whatever the linked domain actually
+   *  serves today. Where that is a marketing site rather than the product
+   *  itself, say so in a comment on the entry. Never point it at a mockup, and
+   *  leave it unset rather than inventing one — a card with no `preview`
+   *  renders as text, which is the honest outcome for work behind a login. */
+  preview?: { src: string; alt: string };
 };
 
 // Terminal block. Every line is a technology that already appears in SKILLS —
@@ -188,6 +194,15 @@ export const PROJECTS: Entry[] = [
     org: "finaccru.com",
     orgHref: "https://finaccru.com",
     meta: "Node.js · React.js · Firebase · Python · AWS S3",
+    // The Finaccru marketing site, which is what finaccru.com actually serves.
+    // Finvault itself sits at finvault.finaccru.com behind a login, and that
+    // host is currently down twice over — expired TLS certificate, and a 404
+    // (DEPLOYMENT_NOT_FOUND) underneath it — so there is no product shot to
+    // use. Swap this for the real thing if that deployment comes back.
+    preview: {
+      src: "/previews/finvault.jpg",
+      alt: "The Finaccru site: the headline “Simplify Your Accounting With Finaccru” between two large green and red shapes.",
+    },
     points: [
       {
         text: "B2B platform digitalising financial documentation and approval workflows, consolidating 20+ features across vendor management, purchase orders, expense tracking, and VAT return filing.",
@@ -202,6 +217,10 @@ export const PROJECTS: Entry[] = [
     org: "Charging station management platform",
     meta: "x-ev.io",
     orgHref: undefined,
+    preview: {
+      src: "/previews/x-ev.jpg",
+      alt: "The X-EV site: a charging station lit in green beside an electric car, over the line “Powering your next move”.",
+    },
     points: [
       {
         text: "Charge-point management platform for EV network operators, covering station provisioning, session monitoring, and operator reporting.",
@@ -215,6 +234,10 @@ export const PROJECTS: Entry[] = [
     role: "The Washee",
     org: "Booking and operations platform",
     meta: "thewashee.com",
+    preview: {
+      src: "/previews/washee.jpg",
+      alt: "The Washee booking site: the headline “Luxury Care, At your Door” over a car being detailed, with a “Reserve Your Service” button.",
+    },
     points: [
       {
         text: "Service booking platform with customer scheduling, admin dashboards, a promo-code engine, and inspection workflows.",

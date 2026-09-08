@@ -58,6 +58,56 @@ const CLOUDS: { art: string; top: string; right: string; dur: string; delay: str
     delay: "-31s",
     dim: 0.18,
   },
+  // The bank below extends the drift further left and further down, so the
+  // clouds thin out gradually into the hero instead of stopping on a line.
+  {
+    art: [
+      "   .-~~-.   ",
+      " .(      ). ",
+      "(___.__)__) ",
+    ].join("\n"),
+    top: "-1rem",
+    right: "24rem",
+    dur: "62s",
+    delay: "-14s",
+    dim: 0.3,
+  },
+  {
+    art: [
+      "  .--.  ",
+      " (    ) ",
+      "(__)__) ",
+    ].join("\n"),
+    top: "5.5rem",
+    right: "31rem",
+    dur: "51s",
+    delay: "-26s",
+    dim: 0.16,
+  },
+  {
+    art: [
+      "    .-.    ",
+      " .-(   ).  ",
+      "(__.__)__) ",
+    ].join("\n"),
+    top: "18.5rem",
+    right: "20rem",
+    dur: "68s",
+    delay: "-41s",
+    dim: 0.12,
+  },
+  {
+    art: [
+      "   .-.   ",
+      "  (   )  ",
+      " (__)__) ",
+    ].join("\n"),
+    top: "10.5rem",
+    right: "5rem",
+    dur: "44s",
+    delay: "-5s",
+    dim: 0.22,
+  },
 ];
 
 export default function Clouds() {
@@ -67,13 +117,18 @@ export default function Clouds() {
         <span
           key={i}
           className="clouds__c"
-          style={{
-            top: c.top,
-            right: c.right,
-            animationDuration: c.dur,
-            animationDelay: c.delay,
-            opacity: c.dim,
-          }}
+          // --dim rather than `opacity`: the sprite carries an opaque backing
+          // so the rain does not show through it, and element opacity would
+          // fade that backing along with the glyphs.
+          style={
+            {
+              top: c.top,
+              right: c.right,
+              animationDuration: c.dur,
+              animationDelay: c.delay,
+              "--dim": String(c.dim),
+            } as React.CSSProperties
+          }
         >
           {c.art}
         </span>

@@ -54,13 +54,17 @@ export default function Motion() {
       const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
       window.__scrollProgress = p;
 
-      // Recede the WebGL field once the hero is off screen — at full strength
-      // it competes with body copy badly.
-      const past = Math.min(1, scrollY / Math.max(1, innerHeight * 0.85));
-      document.documentElement.style.setProperty(
-        "--field-opacity",
-        String(0.55 - past * 0.45),
-      );
+      // Cross-fade the two backdrops. The ranges overlap for about a full
+      // viewport — the stretch where About sits — so the rain thins while the
+      // dust builds and both are visible together through it, rather than one
+      // cutting over to the other at the hero boundary.
+      const v = Math.max(1, innerHeight);
+      const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
+      const rainO = clamp01(1 - (scrollY - v * 0.35) / (v * 1.25));
+      const dustO = clamp01((scrollY - v * 0.5) / v);
+      const root = document.documentElement;
+      root.style.setProperty("--rain-o", rainO.toFixed(3));
+      root.style.setProperty("--dust-o", dustO.toFixed(3));
 
       nav?.classList.toggle("is-stuck", scrollY > 8);
       if (bar) bar.style.transform = `scaleX(${p})`;
